@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management API</title>
+</head>
+<body>
+    <h1>Product Management API</h1>
+
+    <h2>Get All Products</h2>
+    <button onclick="fetchProducts()">Fetch Products</button>
+    <pre id="all-products"></pre>
+
+    <h2>Get Product by ID</h2>
+    <input type="number" id="product-id" placeholder="Enter Product ID" />
+    <button onclick="fetchProductById()">Get Product</button>
+    <pre id="product-detail"></pre>
+
+    <h2>Add a New Product</h2>
+    <input type="text" id="new-product-name" placeholder="Product Name" />
+    <input type="text" id="new-product-description" placeholder="Description" />
+    <input type="number" id="new-product-price" placeholder="Price" />
+    <button onclick="addProduct()">Add Product</button>
+    <pre id="add-product-response"></pre>
+
+    <script>
+        async function fetchProducts() {
+            const response = await fetch('http://localhost:3000/products'); // Changed to port 3000
+            const data = await response.json();
+            document.getElementById('all-products').textContent = JSON.stringify(data, null, 2);
+        }
+    
+        async function fetchProductById() {
+            const id = document.getElementById('product-id').value;
+            const response = await fetch(`http://localhost:3000/products/${id}`); // Changed to port 3000
+            const data = await response.json();
+            document.getElementById('product-detail').textContent = JSON.stringify(data, null, 2);
+        }
+    
+        async function addProduct() {
+            const name = document.getElementById('new-product-name').value;
+            const description = document.getElementById('new-product-description').value;
+            const price = document.getElementById('new-product-price').value;
+    
+            const response = await fetch('http://localhost:3000/products', { // Changed to port 3000
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, description, price })
+            });
+            const data = await response.json();
+            document.getElementById('add-product-response').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+    
+</body>
+</html>
